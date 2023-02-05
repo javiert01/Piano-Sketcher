@@ -1,9 +1,8 @@
 import themidibus.*;
 import javax.sound.midi.MidiMessage;
 
-static final int OCTAVE = 8;
-int numberOfWhiteKeys = 40;
-int numberOfBlackKeys = 20;
+int numberOfWhiteKeys = 35;
+int numberOfBlackKeys = 25;
 int whiteKeyWidth = 0;
 int blackKeyWidth = 0;
 MidiBus myBus;
@@ -16,7 +15,7 @@ void setup() {
   myBus = new MidiBus(this, 1, 1);
   whiteKeyWidth = width/numberOfWhiteKeys;
   blackKeyWidth = 2* whiteKeyWidth / 3;
-  piano = new Piano(35,25,36);
+  piano = new Piano(numberOfWhiteKeys,numberOfBlackKeys,36);
   piano.printKeys();
 }
 
@@ -25,23 +24,8 @@ void draw() {
   stroke(220,0,0);
   fill(255);
   piano.show();
-  
 }
 
-void drawOctave(int initialX) {
-  for(int i=0; i<OCTAVE; i++) {
-    fill(255);
-    int initialKeyPosition = initialX+(whiteKeyWidth*i);
-    rect(initialKeyPosition,0,whiteKeyWidth,80);
-  }
-  for(int i=0; i<OCTAVE; i++) {
-    if(i!=2 && i != OCTAVE - 1) {
-      int initialKeyPosition = initialX+(whiteKeyWidth*i);
-      fill(0);
-      rect(2*whiteKeyWidth/3 + initialKeyPosition,0,blackKeyWidth,50);
-    }
-  }
-}
 
 void midiMessage(MidiMessage message, long timestamp, String bus_name) { 
   if(message.getLength() < 2) {
@@ -54,11 +38,12 @@ void midiMessage(MidiMessage message, long timestamp, String bus_name) {
   } else {
     noteOff(note);
   }
-  println("Bus " + bus_name + ": Note "+ note + ", vel " + vel);
 }
 
 void noteOn(int note) {
+  piano.keys.get(note).showPosition = true;
 }
 
 void noteOff(int note) {
+  piano.keys.get(note).showPosition = false;
 }

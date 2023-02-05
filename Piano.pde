@@ -25,7 +25,7 @@ class Piano {
   }
   
   void initializeKeysPiano() {
-    for(int i = this.initialKeyId, j=0; i<= this.initialKeyId + numberOfWhiteKeys + numberOfBlackKeys; i+=12) {
+    for(int i = this.initialKeyId, j=0; i< this.initialKeyId + numberOfWhiteKeys + numberOfBlackKeys; i+=12) {
       this.initializeKeysByOctave(i, j);
       j+=whiteKeyWidth*OCTAVE;
     }
