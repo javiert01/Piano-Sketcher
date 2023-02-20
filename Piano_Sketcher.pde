@@ -5,6 +5,7 @@ int numberOfWhiteKeys = 35;
 int numberOfBlackKeys = 25;
 int whiteKeyWidth = 0;
 int blackKeyWidth = 0;
+ArrayList<Crystal> crystals = new ArrayList();
 MidiBus myBus;
 Piano piano;
 
@@ -20,10 +21,12 @@ void setup() {
 }
 
 void draw() {
-  strokeWeight(2);
-  stroke(220,0,0);
-  fill(255);
+  background(0);
   piano.show();
+  for(Crystal cr :crystals) {
+    cr.update();
+    cr.show();
+  }
 }
 
 
@@ -41,7 +44,9 @@ void midiMessage(MidiMessage message, long timestamp, String bus_name) {
 }
 
 void noteOn(int note) {
-  piano.keys.get(note).showPosition = true;
+  Key currentKey = piano.keys.get(note);
+  currentKey.showPosition = true;
+  crystals.add(new Crystal(currentKey.xPosition, currentKey.yPosition));
 }
 
 void noteOff(int note) {
