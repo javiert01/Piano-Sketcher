@@ -12,11 +12,11 @@ public class Crystal {
     this.xPosition = xPosition;
     this.yPosition = yPosition;
     this.size = 20;
-    this.crLength = 20;
+    this.crLength = 0.5;
     this.numberOfSides = 8;
     this.angle = TWO_PI / this.numberOfSides;
     this.canShow = false;
-    this.increaseLength = true;
+    this.increaseLength = false;
   }
   
   void setPosition(float xPosition, float yPosition) {
@@ -24,12 +24,16 @@ public class Crystal {
     this.yPosition = yPosition;
   }
   
+  void setIncreaseLength(boolean auxBool) {
+    this.increaseLength = auxBool;
+  }
+  
   void show() {
     if(!this.canShow){
       return;
     }
     strokeWeight(8);
-    stroke(90,148,240);
+    stroke(255,0,0);
     fill(70,150,200);
     float centerX = xPosition + size/2;
     float centerY = yPosition + size;
@@ -49,6 +53,7 @@ public class Crystal {
   }
   
   void update() {
+    
     if(!this.canShow){
       return;
     }
@@ -59,9 +64,9 @@ public class Crystal {
       return;
     }
     if(this.increaseLength) {
-      this.crLength += 1;
+      this.crLength += 4;
       return;
     }
-    this.yPosition += 1;
+    this.yPosition += 4;
   }
 }

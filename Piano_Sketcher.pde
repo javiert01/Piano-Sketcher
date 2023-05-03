@@ -6,11 +6,10 @@ int numberOfBlackKeys = 25;
 int whiteKeyWidth = 0;
 int blackKeyWidth = 0;
 ArrayList<Star> stars = new ArrayList();
-ArrayList<Crystal> crystals = new ArrayList();
-int numberOfStars = 300;
+int numberOfStars = 200;
+int keyCrystalIndex = 0;
 float speed;
-int numberOfCrystals = 50;
-int crystalIndex = 0;
+int numberOfCrystals = 10;
 MidiBus myBus;
 Piano piano;
 Crystal crMouse;
@@ -23,11 +22,12 @@ void setup() {
   whiteKeyWidth = width/numberOfWhiteKeys;
   blackKeyWidth = 2* whiteKeyWidth / 3;
   piano = new Piano(numberOfWhiteKeys,numberOfBlackKeys,36);
-  piano.printKeys();
-  for(int i=0; i <numberOfCrystals; i++){
-    crystals.add(new Crystal(0,0));
+  //piano.printKeys();
+  piano.keys.entrySet().forEach(auxKey -> {
+   for(int i=0; i <numberOfCrystals; i++){
+    auxKey.getValue().crystals.add(new Crystal(0,0));
   }
-   crMouse = crystals.get(5);
+  });
   for (int i = 0; i < numberOfStars; i++) {
     stars.add(new Star());
   }
@@ -50,10 +50,13 @@ void draw() {
     stars.get(i).show();
   }
   popMatrix();
-  for(Crystal cr :crystals) {
+  piano.keys.entrySet().forEach(auxKey -> {
+    for(Crystal cr :auxKey.getValue().crystals) {
     cr.update();
     cr.show();
-  }
+    }
+  });
+  
 }
 
 
@@ -63,11 +66,18 @@ void midiMessage(MidiMessage message, long timestamp, String bus_name) {
   }
   int note = (int)(message.getMessage()[1] & 0xFF);
   int vel = (int)(message.getMessage()[2] & 0xFF);
-  if(vel > 64) {
-    noteOn(note);
-  } else {
-    noteOff(note);
+  Key currentKey = piano.keys.get(note);
+  if(currentKey.currentIndex >= numberOfCrystals) {
+    currentKey.currentIndex = 0;
   }
+  Crystal cr = currentKey.crystals.get(currentKey.currentIndex);
+  cr.setPosition(currentKey.xPosition, currentKey.yPosition);
+  if(vel > 64) {
+    noteOn(currentKey, currentKey.currentIndex);
+  } else {
+    noteOff(currentKey, currentKey.currentIndex - 1);
+  }
+  currentKey.currentIndex++;
 }
 
 void mousePressed() {
@@ -80,18 +90,15 @@ void mouseReleased() {
   crMouse.increaseLength = false;
 }
 
-void noteOn(int note) {
-  if(crystalIndex > numberOfCrystals - 1) {
-    crystalIndex = 0;
-  }
-  Key currentKey = piano.keys.get(note);
-  Crystal cr = crystals.get(crystalIndex);
-  cr.setPosition(currentKey.xPosition, currentKey.yPosition);
+void noteOn(Key currentKey, int index) {
+  Crystal cr = currentKey.crystals.get(index);
+  cr.crLength = 0.5;
   cr.canShow = true;
+  cr.increaseLength = true;
   currentKey.showPosition = true;
-  crystalIndex++;
 }
 
-void noteOff(int note) {
-  piano.keys.get(note).showPosition = false;
+void noteOff(Key currentKey,int index) {
+  currentKey.setCrystalLength(index, false);
+  currentKey.showPosition = false;
 }

@@ -4,6 +4,8 @@ public class Key {
   public float xPosition;
   public float yPosition;
   public boolean showPosition;
+  public int currentIndex;
+  public ArrayList<Crystal> crystals;
   
   public Key(int id, boolean isWhite, float xPosition, float yPosition){
     this.id = id;
@@ -11,6 +13,12 @@ public class Key {
     this.xPosition = xPosition;
     this.yPosition = yPosition;
     this.showPosition = false;
+    this.crystals = new ArrayList();
+    this.currentIndex = 0;
+  }
+  
+  void setCrystalLength(int index, boolean increaseLength) {
+    this.crystals.get(index).setIncreaseLength(increaseLength);
   }
   
   void show() {
