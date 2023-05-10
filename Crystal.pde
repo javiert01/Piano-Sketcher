@@ -33,8 +33,8 @@ public class Crystal {
       return;
     }
     strokeWeight(8);
-    stroke(255,0,0);
-    fill(70,150,200);
+    stroke(30,40,70);
+    fill(0,20);
     float centerX = xPosition + size/2;
     float centerY = yPosition + size;
     beginShape();

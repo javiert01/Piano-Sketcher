@@ -13,16 +13,16 @@ int numberOfCrystals = 10;
 MidiBus myBus;
 Piano piano;
 Crystal crMouse;
+PImage backgroundPhoto;
 
 void setup() {
   size(1800, 800);
-  background(0);
+  backgroundPhoto = loadImage("sky.png");
   MidiBus.list(); 
   myBus = new MidiBus(this, 1, 1);
   whiteKeyWidth = width/numberOfWhiteKeys;
   blackKeyWidth = 2* whiteKeyWidth / 3;
   piano = new Piano(numberOfWhiteKeys,numberOfBlackKeys,36);
-  //piano.printKeys();
   piano.keys.entrySet().forEach(auxKey -> {
    for(int i=0; i <numberOfCrystals; i++){
     auxKey.getValue().crystals.add(new Crystal(0,0));
@@ -33,23 +33,24 @@ void setup() {
   }
 }
 
+
 void draw() {
-  background(0);
+  image(backgroundPhoto,0, 0);
   stroke(0);
   strokeWeight(1);
   piano.show();
   speed = 5;
-  pushMatrix();
-  // I shift the entire composition,
-  // moving its center from the top left corner to the center of the canvas.
-  translate(width/2, height/2);
-  // I draw each star, running the "update" method to update its position and
-  // the "show" method to show it on the canvas.
-  for (int i = 0; i < numberOfStars; i++) {
-    stars.get(i).update();
-    stars.get(i).show();
-  }
-  popMatrix();
+  //pushMatrix();
+  //// I shift the entire composition,
+  //// moving its center from the top left corner to the center of the canvas.
+  //translate(width/2, height/2);
+  //// I draw each star, running the "update" method to update its position and
+  //// the "show" method to show it on the canvas.
+  //for (int i = 0; i < numberOfStars; i++) {
+  //  stars.get(i).update();
+  //  stars.get(i).show();
+  //}
+  //popMatrix();
   piano.keys.entrySet().forEach(auxKey -> {
     for(Crystal cr :auxKey.getValue().crystals) {
     cr.update();
