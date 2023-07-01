@@ -14,6 +14,7 @@ MidiBus myBus;
 Piano piano;
 Crystal crMouse;
 PImage backgroundPhoto;
+color leafColor;
 
 void setup() {
   size(1800, 800);
@@ -31,6 +32,7 @@ void setup() {
   for (int i = 0; i < numberOfStars; i++) {
     stars.add(new Star());
   }
+  leafColor = color(220,120,170, 100);
 }
 
 
@@ -40,6 +42,18 @@ void draw() {
   strokeWeight(1);
   piano.show();
   speed = 5;
+  pushMatrix();
+  translate(width/2, height);
+  branch(80, color(180,100));
+  popMatrix();
+  pushMatrix();
+  translate(width/4, height);
+  branch(60, leafColor);
+  popMatrix();
+  pushMatrix();
+  translate(3*width/4, height);
+  branch(60, leafColor);
+  popMatrix();
   //pushMatrix();
   //// I shift the entire composition,
   //// moving its center from the top left corner to the center of the canvas.
@@ -79,6 +93,25 @@ void midiMessage(MidiMessage message, long timestamp, String bus_name) {
     noteOff(currentKey, currentKey.currentIndex - 1);
   }
   currentKey.currentIndex++;
+}
+
+void branch(float len, color leafColor) {
+  pushMatrix();
+  if(len > 10) {
+    stroke(0);
+    strokeWeight(map(len,10,100,1,15));
+    line(0,0,0,-len);
+    translate(0, -len);
+    rotate(radians(30));
+    branch(len * 0.8, leafColor);
+    rotate(radians(-55));
+    branch(len * 0.75, leafColor);
+  } else {
+    fill(leafColor);
+    noStroke();
+    ellipse(0,0,10,10);
+  }
+  popMatrix();
 }
 
 void mousePressed() {
