@@ -5,7 +5,6 @@ int numberOfWhiteKeys = 35;
 int numberOfBlackKeys = 25;
 int whiteKeyWidth = 0;
 int blackKeyWidth = 0;
-ArrayList<Star> stars = new ArrayList();
 int numberOfStars = 200;
 int keyCrystalIndex = 0;
 float speed;
@@ -13,6 +12,7 @@ int numberOfCrystals = 10;
 MidiBus myBus;
 Piano piano;
 Crystal crMouse;
+ArrayList<Particle> particles;
 PImage backgroundPhoto;
 color leafColor;
 
@@ -29,9 +29,8 @@ void setup() {
     auxKey.getValue().crystals.add(new Crystal(0,0));
   }
   });
-  for (int i = 0; i < numberOfStars; i++) {
-    stars.add(new Star());
-  }
+  particles = new ArrayList();
+  particles.add(new Particle(width/3, height/3,50, color(255), 12));
   leafColor = color(220,120,170, 100);
 }
 
@@ -54,24 +53,23 @@ void draw() {
   translate(3*width/4, height);
   branch(60, leafColor);
   popMatrix();
-  //pushMatrix();
-  //// I shift the entire composition,
-  //// moving its center from the top left corner to the center of the canvas.
-  //translate(width/2, height/2);
-  //// I draw each star, running the "update" method to update its position and
-  //// the "show" method to show it on the canvas.
-  //for (int i = 0; i < numberOfStars; i++) {
-  //  stars.get(i).update();
-  //  stars.get(i).show();
-  //}
-  //popMatrix();
+  for(int i = 0; i < particles.size(); i++)
+  {
+    Particle p = particles.get(i);
+    if(p.alive)
+    {
+      p.drawParticle();
+      p.reproduce(particles);
+    }
+    else
+      particles.remove(i);
+  }
   piano.keys.entrySet().forEach(auxKey -> {
     for(Crystal cr :auxKey.getValue().crystals) {
     cr.update();
     cr.show();
     }
   });
-  
 }
 
 
@@ -114,14 +112,9 @@ void branch(float len, color leafColor) {
   popMatrix();
 }
 
-void mousePressed() {
-  crMouse.increaseLength = true;
-  crMouse.setPosition(width/2, 0);
-  crMouse.canShow = true;
-}
-
-void mouseReleased() {
-  crMouse.increaseLength = false;
+void mouseReleased()
+{
+  particles.add(new Particle(mouseX, mouseY, 50, color(255), 12));
 }
 
 void noteOn(Key currentKey, int index) {
