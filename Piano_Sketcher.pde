@@ -15,6 +15,7 @@ Crystal crMouse;
 ArrayList<Particle> particles;
 PImage backgroundPhoto;
 color leafColor;
+PVector windForce;
 
 void setup() {
   size(1800, 800);
@@ -30,13 +31,16 @@ void setup() {
   }
   });
   particles = new ArrayList();
-  particles.add(new Particle(width/3, height/3,50, color(255), 12));
+  particles.add(new Particle(width/3, height/3,52, color(255), 12));
+  //particles.add(new Particle(2* width/3, height/3,45, color(255), 12));
+  //windForce = new PVector(0.05,0);
   leafColor = color(220,120,170, 100);
 }
 
 
 void draw() {
   image(backgroundPhoto,0, 0);
+  //background(0);
   stroke(0);
   strokeWeight(1);
   piano.show();
@@ -56,13 +60,12 @@ void draw() {
   for(int i = 0; i < particles.size(); i++)
   {
     Particle p = particles.get(i);
+    //p.applyForce(windForce);
+    p.run();
     if(p.alive)
     {
-      p.drawParticle();
       p.reproduce(particles);
     }
-    else
-      particles.remove(i);
   }
   piano.keys.entrySet().forEach(auxKey -> {
     for(Crystal cr :auxKey.getValue().crystals) {
@@ -110,11 +113,6 @@ void branch(float len, color leafColor) {
     ellipse(0,0,10,10);
   }
   popMatrix();
-}
-
-void mouseReleased()
-{
-  particles.add(new Particle(mouseX, mouseY, 50, color(255), 12));
 }
 
 void noteOn(Key currentKey, int index) {
