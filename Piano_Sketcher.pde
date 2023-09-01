@@ -1,14 +1,14 @@
 import themidibus.*;
 import javax.sound.midi.MidiMessage;
 
+float speed;
 int numberOfWhiteKeys = 35;
 int numberOfBlackKeys = 25;
 int whiteKeyWidth = 0;
 int blackKeyWidth = 0;
 int numberOfStars = 200;
 int keyCrystalIndex = 0;
-float speed;
-int numberOfCrystals = 10;
+int numberOfCrystals = 20;
 MidiBus myBus;
 Piano piano;
 Crystal crMouse;
@@ -31,36 +31,20 @@ void setup() {
   }
   });
   particles = new ArrayList();
-  particles.add(new Particle(width/3, height/3,52, color(255), 12));
-  //particles.add(new Particle(2* width/3, height/3,45, color(255), 12));
-  //windForce = new PVector(0.05,0);
+  particles.add(new Particle(width/3, height/3,53, color(255), 15));
   leafColor = color(220,120,170, 100);
 }
 
 
 void draw() {
   image(backgroundPhoto,0, 0);
-  //background(0);
   stroke(0);
   strokeWeight(1);
   piano.show();
-  speed = 5;
-  pushMatrix();
-  translate(width/2, height);
-  branch(80, color(180,100));
-  popMatrix();
-  pushMatrix();
-  translate(width/4, height);
-  branch(60, leafColor);
-  popMatrix();
-  pushMatrix();
-  translate(3*width/4, height);
-  branch(60, leafColor);
-  popMatrix();
+  noStroke();
   for(int i = 0; i < particles.size(); i++)
   {
     Particle p = particles.get(i);
-    //p.applyForce(windForce);
     p.run();
     if(p.alive)
     {

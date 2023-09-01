@@ -27,11 +27,16 @@ class Piano {
   void initializeKeysPiano() {
     for(int i = this.initialKeyId, j=0; i< this.initialKeyId + numberOfWhiteKeys + numberOfBlackKeys; i+=12) {
       this.initializeKeysByOctave(i, j);
+      line(j,0,j,width);
       j+=whiteKeyWidth*OCTAVE;
     }
   }
   
   void show() {
+    for(int i = this.initialKeyId, j=0; i< this.initialKeyId + numberOfWhiteKeys + numberOfBlackKeys; i+=12) {
+      line(j,0,j,width);
+      j+=whiteKeyWidth*OCTAVE;
+    }
      this.keys.entrySet().forEach(key -> {
       if(key.getValue().isWhite) {
           key.getValue().show();

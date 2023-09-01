@@ -33,8 +33,9 @@ public class Crystal {
       return;
     }
     strokeWeight(8);
-    stroke(30,40,70);
-    fill(0,20);
+    stroke(54,69,79);
+    //fill(0,20);
+    fill(46,106,166, 120);
     float centerX = xPosition + size/2;
     float centerY = yPosition + size;
     beginShape();
@@ -64,9 +65,9 @@ public class Crystal {
       return;
     }
     if(this.increaseLength) {
-      this.crLength += 4;
+      this.crLength += 6;
       return;
     }
-    this.yPosition += 4;
+    this.yPosition += 6;
   }
 }

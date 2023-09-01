@@ -27,7 +27,7 @@ class Particle
       {
         float newX = position.x + random(-w, w);
         float newY = position.y + random(-w/2, w/4);
-        float r = random(10);
+        float r = random(2,8);
         float newW = w - r;
         if(newW < 1)
           newW = 1;
@@ -38,6 +38,9 @@ class Particle
   }
   
   void update() {
+    if(position.x > width) {
+      position = new PVector(0, position.y);
+    }
     velocity.add(acceleration);
     position.add(velocity);
     acceleration.mult(0);
